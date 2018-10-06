@@ -16,6 +16,11 @@ namespace Eshva.Threading
 	{
 		public FixedThreadPool(int workCount)
 		{
+			if (workCount <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(workCount));
+			}
+
 			_workCount = workCount;
 			var cancellationToken = _cancellationTokenSource.Token;
 			Task.Run(() => ScheduleTaskAsync(cancellationToken), cancellationToken);
@@ -23,6 +28,11 @@ namespace Eshva.Threading
 
 		public Task<bool> Execute(ITask task, Priority priority)
 		{
+			if (task == null)
+			{
+				throw new ArgumentNullException(nameof(task));
+			}
+
 			if (_isStopped)
 			{
 				Console.WriteLine("Tried to execute a task but thread pool already stopped.");
