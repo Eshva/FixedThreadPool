@@ -1,6 +1,49 @@
 # FixedThreadPool Challenge
-# Задание
+# The Quiz
 
+Implement an analogue of Java FixedThreadPool class with the following requirements:
+* Use C#.
+* The ```FixedThreadPool``` class constructor should receive the number of concurrently served tasks (TPL Task).
+* The ```FixedThreadPool``` class should have the following methods: ```async Task<bool> Execute(ITask task, Priority priority)``` and ```void Stop()```.
+* The interface ```ITask``` should have a single method ```void Execute()``` which executing with a rendom TPL task.
+* The ```Priority``` is an enumeration with three values: HIGH, NORMAL, LOW.
+* There are the following rules for task choosing: (1) Per 5 high proprity tasks should be executed 1 normal priority task, next time 2 normal priority tasks, next time 1 and so on. (2) Low priority tasks should not be executed till there are any queued tasks with higher priorities.
+* Until the ```Stop``` method called the tasks are queued with the ```Execute``` method which immediately returns ```true``` with no waiting the task is complete. After the ```Stop``` method called the ```Execute``` method immediately returns ```false``` and the task not queued for execution.
+* The method ```Stop``` is waiting for all the queued and executing tasks are complete then returns.
+* For implementation the Task based asynchonous programming should be used.
+
+Proposed types are:
+
+```
+public class FixedThreadPool
+{
+	public FixedThreadPool(int workCount) {}
+	public async Task<bool> Execute(ITask task, Priority priority) {}
+	async Task Stop() {}
+}
+
+public interface ITask
+{
+	void Execute();
+}
+
+public enum Priority
+{
+	HIGH,
+	NORMAL, 
+	LOW
+}
+```
+
+# My implementation
+1. I haven't understood why the ```FixedThreadPool.Execute``` method should be ```async``` because it should return immediately in both cases. There is nothing to wait in my implementation.
+2. In the requirements there is nothing about the case when there are normal priority queued task but no any high priority tasks. I've decided that in this case it's better to give a chance for normal priority tasks to be executed.
+3. There is no requirements what to do with the scheduler thread after the ```Stop``` method called and all tasks are complete. I've decided that it should be stopped because there is no requirement to implement the ```IDisposable``` interface and the pool object is useless after it stopped (there is no method to start it again).
+4. I used for all lists CLR concurrent collections to implemenent lock-free multi-threading.
+5. For testing means I've implemented a console application ```ShowRunner```. For the same means I've added some console tracing into the pool code. Of course it should be avoided in production code. It is a .NET Core console application and there is no an EXE-file we used to. To execute the test application you should use the following command line from the solution root folder:
+```dotnet run --project ShowRunner```
+
+# Задание
 **Сохранены орфография и пунктуация оригинала.**
 
 Требуется реализация класса, аналогичного FixedThreadPool в Java, со следующими требованиями:
