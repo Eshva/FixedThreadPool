@@ -1,5 +1,5 @@
 # FixedThreadPool Challenge
-# The Quiz
+## The Quiz
 
 Implement an analogue of Java FixedThreadPool class with the following requirements:
 * Use C#.
@@ -35,7 +35,7 @@ public enum Priority
 }
 ```
 
-# My implementation
+## My implementation
 1. I haven't understood why the ```FixedThreadPool.Execute``` method should be ```async``` because it should return immediately in both cases. There is nothing to wait in my implementation.
 2. In the requirements there is nothing about the case when there are normal priority queued task but no any high priority tasks. I've decided that in this case it's better to give a chance for normal priority tasks to be executed.
 3. There is no requirements what to do with the scheduler thread after the ```Stop``` method called and all tasks are complete. I've decided that it should be stopped because there is no requirement to implement the ```IDisposable``` interface and the pool object is useless after it stopped (there is no method to start it again).
@@ -43,7 +43,8 @@ public enum Priority
 5. For testing means I've implemented a console application ```ShowRunner```. For the same means I've added some console tracing into the pool code. Of course it should be avoided in production code. It is a .NET Core console application and there is no an EXE-file we used to. To execute the test application you should use the following command line from the solution root folder:
 ```dotnet run --project ShowRunner```
 
-# Задание
+# По-русски
+## Задание
 **Сохранены орфография и пунктуация оригинала.**
 
 Требуется реализация класса, аналогичного FixedThreadPool в Java, со следующими требованиями:
